@@ -1,0 +1,3 @@
+check process chef-solr with pidfile /var/run/chef/solr.pid
+start program = "/etc/init.d/chef-solr start"
+stop program  = "/etc/init.d/chef-solr stop"

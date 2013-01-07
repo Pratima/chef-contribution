@@ -1,0 +1,3 @@
+check process chef-server with pidfile /var/run/chef/server.main.pid
+start program = "/etc/init.d/chef-server start"
+stop program  = "/etc/init.d/chef-server stop"
