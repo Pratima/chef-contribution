@@ -1,0 +1,11 @@
+define command {
+		command_name						graphite_perf_host
+		command_line						/bin/mv /var/spool/nagios/graphios/host-perfdata /var/spool/nagios/graphios/host-perfdata.$TIMET$
+
+}
+
+define command {
+		command_name						graphite_perf_service
+		command_line						/bin/mv /var/spool/nagios/graphios/service-perfdata /var/spool/nagios/graphios/service-perfdata.$TIMET$
+}
+

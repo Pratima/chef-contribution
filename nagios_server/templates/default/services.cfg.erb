@@ -1,0 +1,152 @@
+###############################################################################
+# DEVCLOUD PRIMARY NAGIOS MONITORING NETWORK
+# SERVICES.CFG - DO NOT MODIFY BY HAND
+###############################################################################
+
+<% @nodes_from_solr.each do |node| %>
+### <%= node.fqdn %> ###
+define service{
+  use									 generic-service
+  host_name				  <%=node.fqdn %>
+  service_description	 SSH
+  check_command				 check_nrpe!check_ssh<%= "!-p#{node['ssh_port']}" unless node['ssh_port'].nil?%> 
+  contact_groups			 admins
+}
+
+define service{
+  use									   generic-service
+  host_name				   <%= node.fqdn %>
+  service_description	   Stray Monkey
+  check_command				   check_nrpe!check_convergence
+  contact_groups				 admins
+  normal_check_interval  40
+  notification_interval  2880					;2 days
+  notification_period    workhours
+  event_handler          restart-chef-client
+  event_handler_enabled			1
+}
+
+define service{
+  use                    generic-service
+  host_name          <%= node.fqdn %>
+  service_description    Disk Space
+  check_command          check_nrpe!check_disk
+  contact_groups         admins
+  notification_interval  2880          ;2 days
+  notification_period    workhours
+}
+
+define service{
+  use									   generic-service
+  host_name					 <%= node.fqdn %>
+  service_description	   CPU Load
+  check_command				   check_nrpe!check_load
+  contact_groups				 admins
+  notification_interval  2880					;2 days
+  notification_period	   workhours
+  _graphitepostfix			 Check_CPU
+}
+
+define service{
+  use									   generic-service
+  host_name					 <%= node.fqdn %>
+  service_description	   Disk Usage 
+  check_command				   check_nrpe!check_space
+  contact_groups				 admins
+  notification_interval  2880					;2 days
+  notification_period	   workhours
+  _graphitepostfix			 Disk_Space
+}
+
+define service{
+  use									   generic-service
+  host_name					 <%= node.fqdn %>
+  service_description	   Disk Inode
+  check_command				   check_nrpe!check_inode
+  contact_groups				 admins
+  notification_interval  2880					;2 days
+  notification_period	   workhours
+  _graphitepostfix			 Disk_Inode
+}
+
+define service{
+  use									   generic-service
+  host_name					 <%= node.fqdn %>
+  service_description	   Memory
+  check_command				   check_nrpe!check_memory
+  contact_groups				 admins
+  notification_interval  2880					;2 days
+  notification_period	   workhours
+  _graphitepostfix			 Check_RAM
+}
+
+define service{
+  use									   generic-service
+  host_name					 <%= node.fqdn %>
+  service_description	   Procs
+  check_command				   check_nrpe!check_procs
+  contact_groups				 admins
+  notification_interval  2880					;2 days
+  notification_period	   workhours
+  _graphitepostfix			 Check_Procs
+}
+
+define service{
+  use                    generic-service
+  host_name          <%= node.fqdn %>
+  service_description    Chef Run Status
+  check_command          check_nrpe!chef_stat
+  contact_groups         admins
+  notification_interval  2880          ;2 days
+  normal_check_interval  45
+  notification_period    workhours
+  _graphitepostfix       Chef_Stat
+}
+
+define service{
+  use                    generic-service
+  host_name          <%= node.fqdn %>
+  service_description    User Bean Counters
+  check_command          check_nrpe!check_UBC
+  contact_groups         admins
+  notification_interval  2880          ;2 days
+  notification_period    workhours
+  _graphitepostfix       check_UBC
+}
+
+<% if node['nrpe'].nil? %>
+define service{
+  use									   generic-service
+  host_name					 <%= node.fqdn %>
+  service_description	   Vigilance Monkey
+  check_command				   check_nrpe!vigilance_monkey_warning
+  contact_groups				 admins
+  notification_interval  2880					;2 days
+  notification_period	   workhours
+}
+<% else %>
+<% node['nrpe'].each do |command| %>
+<% if command.first == "check_go_agent" %>
+define service{
+  use									   generic-service
+  host_name					 <%= node.fqdn %>
+  service_description <%= command.first %>
+  check_command				   check_nrpe!<%= command.first %>
+  contact_groups				 admins
+  event_handler 		     restart-go-agent
+  event_handler_enabled			1
+}
+<% else %>
+define service{
+  use									   generic-service
+  host_name					 <%= node.fqdn %>
+  service_description <%= command.first %>
+  check_command				   check_nrpe!<%= command.first %>
+  contact_groups				 admins
+}
+<% end %>	
+<% end %>
+<% end %>
+#####################
+
+<% end %>

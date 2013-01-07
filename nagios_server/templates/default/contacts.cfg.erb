@@ -1,0 +1,47 @@
+###############################################################################
+# DEVCLOUD PRIMARY NAGIOS MONITORING NETWORK
+# CONTACTS.CFG - DO NOT MODIFY BY HAND
+###############################################################################
+
+define contact{
+  contact_name          devops-alerts
+  use                   generic-contact
+  alias                 TW Devops Mailing List
+  email                 devops-alerts@thoughtworks.com
+}
+
+define contact{
+  contact_name          pratima
+  use                   generic-contact
+  alias                 Pratima Singh
+  email                 pratima@thoughtworks.com
+}
+
+define contact{
+  contact_name          akshay
+  use                   generic-contact
+  alias                 Akshay Karle
+  email                 akshayka@thoughtworks.com
+}
+
+define contact{
+  contact_name          gaurav
+  use                   generic-contact
+  alias                 Gaurav Kasera
+  email                 gauravka@thoughtworks.com
+}
+
+
+### GROUPS
+
+define contactgroup{
+  contactgroup_name     all
+  alias                 DevCloud Nagios Administrators
+  members               devops-alerts
+}
+
+define contactgroup{
+  contactgroup_name     admins
+  alias                 DevCloud Nagios Administrators
+  members               pratima,gaurav,akshay
+}

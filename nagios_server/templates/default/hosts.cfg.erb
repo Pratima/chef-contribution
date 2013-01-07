@@ -1,0 +1,60 @@
+###############################################################################
+# DEVCLOUD PRIMARY NAGIOS MONITORING NETWORK
+# HOSTS.CFG - DO NOT MODIFY BY HAND
+###############################################################################
+
+<%@nodes_from_solr.each do |node_from_solr| %>
+define host{
+	use                  linux-server
+  host_name            <%=node_from_solr.fqdn%>
+	alias                <%=node_from_solr.name%>
+	<% if node_from_solr.virtualization['emulator'] == "openvz" and node_from_solr.virtualization['role'] == "guest" %>
+	address              <%=node_from_solr.network.interfaces['venet0:0'].peer%>
+	<% else %>
+	address              <%=node_from_solr.ipaddress%>
+	<% end %>
+	contact_groups        admins
+	_graphiteprefix      devcloud.pingto
+}
+<%end %>
+
+<% if @centos_servers.size != 0 %>
+define hostgroup{
+	hostgroup_name    centos_servers
+	alias       CentOS Servers
+	members       <%=@centos_servers.collect{|centos_servers| centos_servers.fqdn}.join(",")%>
+}
+<% end %>
+
+<% if @ubuntu_servers.size != 0 %>
+define hostgroup{
+	hostgroup_name    ubuntu_servers
+	alias       Ubuntu Servers
+	members       <%=@ubuntu_servers.collect{|ubuntu_servers| ubuntu_servers.fqdn}.join(",")%>
+}
+<% end %>
+
+<% if @go_agents.size != 0 %>
+define hostgroup{
+	hostgroup_name    go_agent
+	alias       Go Agents
+	members       <%=@go_agents.collect{|go_agent| go_agent.fqdn}.join(",")%>
+}
+<% end %>
+
+<% if @go_servers.size != 0 %>
+define hostgroup{
+	hostgroup_name    go_servers
+	alias       Go Servers
+	members       <%=@go_servers.collect{|go_server| go_server.fqdn}.join(",")%>
+}
+<% end %>
+
+<% if @web_servers.size != 0 %>
+define hostgroup{
+	hostgroup_name    web_servers
+	alias       Web Servers
+	members       <%=@web_servers.collect{|web_server| web_server.fqdn}.join(",")%>
+}
+<% end %>
+

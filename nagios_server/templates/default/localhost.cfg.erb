@@ -1,0 +1,44 @@
+###############################################################################
+# DEVCLOUD PRIMARY NAGIOS MONITORING NETWORK
+# LOCALHOST.CFG - DO NOT MODIFY BY HAND
+###############################################################################
+
+define host{
+  use                     linux-server
+  host_name               localhost
+  alias                   localhost
+<% if node.virtualization['emulator'] == "openvz" and node.virtualization['role'] == "guest" %>
+  address              <%=node.network.interfaces['venet0:0'].peer%>
+<% else %>
+  address              <%=node.ipaddress%>
+<% end %>
+}
+
+define hostgroup{
+  hostgroup_name          linux-servers
+  alias                   Linux Servers
+  members                 localhost
+}
+
+define service{
+  use                     generic-service
+  host_name               localhost
+  service_description     PING
+  check_command		        check_ping!100.0,20%!500.0,60%
+}
+
+define service{
+  use                     generic-service
+  host_name               localhost
+  service_description     SSH
+  check_command		        check_ssh
+  notifications_enabled	  0
+}
+
+define service{
+  use                     generic-service
+  host_name               localhost
+  service_description     HTTP
+  check_command		        check_http
+  notifications_enabled	  0
+}

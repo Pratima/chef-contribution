@@ -1,0 +1,53 @@
+#!/bin/bash
+#
+date=`date`
+
+case "$1" in
+OK)
+        # The service just came back up, so don't do anything...
+        ;;
+WARNING)
+        case "$2" in
+        SOFT)
+
+                case "$3" in
+                2)
+                        echo -n "Running Chef-Client...."
+                        /usr/lib64/nagios/plugins/check_nrpe -H $4 -c restart-chef -t 60
+                        echo "$date - restart go-agent - SOFT"  >> /tmp/eventhandlers
+			 ;;
+                        esac
+                ;;
+
+        HARD)
+                         echo -n "Restarting go-agent service...."
+                        /usr/lib64/nagios/plugins/check_nrpe -H $4 -c restart-chef -t 60
+                        echo "$date - restart go-agent - SOFT"  >> /tmp/eventhandlers
+                ;;
+        esac
+        ;;
+UNKNOWN)
+        # We don't know what might be causing an unknown error, so don't do anything...
+        ;;
+CRITICAL)
+        case "$2" in
+        SOFT)
+
+                case "$3" in
+                2)
+                        echo -n "Running Chef-Client...."
+                        /usr/lib64/nagios/plugins/check_nrpe -H $4 -c restart-chef -t 40
+                        echo "$date - restart go-agent - SOFT"  >> /tmp/eventhandlers
+			 ;;
+                        esac
+                ;;
+
+        HARD)
+                         echo -n "Restarting go-agent service...."
+                        /usr/lib64/nagios/plugins/check_nrpe -H $4 -c restart-chef -t 40
+                        echo "$date - restart go-agent - SOFT"  >> /tmp/eventhandlers
+                ;;
+        esac
+        ;;
+esac
+exit 0
