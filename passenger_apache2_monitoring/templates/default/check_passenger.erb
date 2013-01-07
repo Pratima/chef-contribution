@@ -1,0 +1,22 @@
+#!/usr/bin/ruby
+ 
+max_pool_size = `sudo passenger-status | grep max | tr -s ' ' | cut -d ' ' -f 3 2>&1`
+running_instances = `sudo passenger-status | grep count | tr -s ' ' | cut -d ' ' -f 3 2>&1`
+ 
+oe = `sudo passenger-status 2>&1`
+ 
+if $? == 0
+  if running_instances == max_pool_size
+    puts 'WARNING: Hosted Application running maximum number of instances'
+    retval=1
+  else
+    puts 'NORMAL: Hosted Application is under no stress'
+    retval=0
+  end
+else
+  puts 'CRITICAL: Hosted Application outage'
+  retval=2
+end
+ 
+exit retval
+
