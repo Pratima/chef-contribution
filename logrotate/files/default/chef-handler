@@ -1,0 +1,10 @@
+/var/chef/reports/*.json{
+  rotate 2
+  daily
+  copytruncate
+  notifempty
+  missingok
+  lastaction
+    find /var/chef/reports/ -name "*.json" -size 0 | xargs rm -f;
+  endscript
+}
