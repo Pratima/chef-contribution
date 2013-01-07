@@ -1,0 +1,3 @@
+DESCRIPTION
+===========
+Installs aspell-devel
