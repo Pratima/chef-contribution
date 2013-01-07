@@ -1,0 +1,8 @@
+= DESCRIPTION:
+Installs curl
+= REQUIREMENTS:
+
+= ATTRIBUTES:
+
+= USAGE:
+
