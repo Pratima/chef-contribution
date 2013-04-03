@@ -1,0 +1,6 @@
+[jenkins]
+name=Repo for jenkin
+baseurl=http://pkg.jenkins-ci.org/redhat/
+gpgcheck=0
+enabled=1
+gpgkey=http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key  
