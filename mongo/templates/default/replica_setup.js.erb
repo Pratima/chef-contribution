@@ -1,0 +1,10 @@
+config = {_id: '<%=@mongo_replica_id%>', members: [
+  { _id : 0, host: '<%=@mongo_primary.strip %>', priority: 2},
+  <% @mongo_nodes.each_with_index do | host, index | -%>
+  { _id : <%=index+1%>, host: '<%=host.strip %>'},
+  <% end -%>
+  { _id : <%=@mongo_nodes.length+1%>, host: '<%=@mongo_arbiter.strip%>', arbiterOnly: true}
+  ]
+}
+rs.initiate(config);
+

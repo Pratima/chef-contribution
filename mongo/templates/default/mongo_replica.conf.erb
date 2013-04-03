@@ -1,0 +1,17 @@
+logpath = /var/log/mongo/mongod.log
+logappend = true
+dbpath = /data/hcah/
+fork = true
+port = 27017
+journal = true
+
+<% if @auth_enabled == true %>
+auth=true
+<% end -%>
+
+<% if @is_replica_set == true %>
+replSet = <%=node[:database][:replica][:id]%> 
+keyFile= <%=node[:database][:secret_key]%>
+<% end -%>
+
+#syncdelay
