@@ -46,7 +46,7 @@ module KnifePlugins
       ui.msg '-'*80
       ui.msg "Applying mongo dump of build on #{@db_primary}"
       ui.msg '-'*80
-      ui.msg cmd=dbdumpapply_command(@db_primary, @db_port, @env, @dump_dir) 
+      cmd=dbdumpapply_command(@db_primary, @db_port, @env, @dump_dir) 
       %x[#{cmd}]
     end
 
@@ -63,7 +63,7 @@ module KnifePlugins
       true if !option.nil? && !option.strip.empty?
     end
 
-     def dbdump_command db_host, db_port, env, dump_dir
+    def dbdumpapply_command db_host, db_port, env, dump_dir
       
       db_creds = load_databag(env)
 
